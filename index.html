@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pongal Website</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:#fff7d1;
+  text-align:center;
+}
+
+/* NAV */
+nav{
+  background:#7a2a00;
+  padding:14px;
+}
+nav a{
+  color:white;
+  margin:0 15px;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+/* SECTIONS */
+section{
+  padding:80px 20px;
+}
+h1,h2{
+  color:#7a2a00;
+}
+
+/* IMAGE */
+img{
+  width:280px;
+  max-width:90%;
+  border-radius:18px;
+  box-shadow:0 6px 14px rgba(0,0,0,.3);
+  touch-action:pan-y;
+}
+
+/* BUTTON */
+button{
+  padding:12px 26px;
+  border:none;
+  border-radius:25px;
+  background:#7a2a00;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* CARD */
+.card{
+  background:white;
+  max-width:700px;
+  margin:20px auto;
+  padding:25px;
+  border-radius:20px;
+  line-height:1.7;
+}
+
+/* FOOTER */
+footer{
+  background:#7a2a00;
+  color:white;
+  padding:18px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 AUDIO (IMPORTANT: IDs, not filenames) -->
+<audio id="song1" src="Akka Thambi Song.mp3" loop></audio>
+<audio id="song2" src="Kallaliye Kallaliye.mp3" loop></audio>
+<audio id="song3" src="M Kumaran So Magalakshmi Bgm.mp3" loop></audio>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#wishes">Wishes</a>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+  <h1>🌾 Happy Pongal Akka 🌾</h1>
+  <p>From Your Thambi 💛</p>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <h2>📸 Memories</h2>
+
+  <img id="photo" src="IMG-20260112-WA0139.jpg"><br><br>
+
+  <button onclick="nextPhoto()">
+    Next Photo & Song 🎵
+  </button>
+
+  <p style="font-size:14px;color:#7a2a00;">
+    Tap button or swipe left / right on photo
+  </p>
+</section>
+
+<!-- WISHES -->
+<section id="wishes">
+  <h2>💛 Akka – Thambi Bond</h2>
+  <div class="card" id="typing"></div>
+</section>
+
+<footer>
+🌾 Pongalo Pongal • Fixed Music Logic • Thambi 💛
+</footer>
+
+<script>
+/* ===== PHOTO + SONG DATA ===== */
+let photos = [
+  "IMG-20260112-WA0139.jpg",
+  "IMG-20260112-WA0142.jpg",
+  "1736849768046.jpg"
+];
+
+let songs = ["song1", "song2", "song3"];
+let index = 0;
+
+/* STOP ALL SONGS */
+function stopAllSongs(){
+  songs.forEach(id=>{
+    let s = document.getElementById(id);
+    s.pause();
+    s.currentTime = 0;
+  });
+}
+
+/* SHOW CURRENT PHOTO + SONG */
+function showCurrent(){
+  document.getElementById("photo").src = photos[index];
+
+  stopAllSongs();
+
+  let song = document.getElementById(songs[index]);
+  song.volume = 0.6;
+  song.play().catch(()=>{});
+}
+
+/* NEXT PHOTO */
+function nextPhoto(){
+  index = (index + 1) % photos.length;
+  showCurrent();
+}
+
+/* PREVIOUS PHOTO */
+function prevPhoto(){
+  index = (index - 1 + photos.length) % photos.length;
+  showCurrent();
+}
+
+/* SWIPE SUPPORT */
+let startX = 0;
+const img = document.getElementById("photo");
+
+img.addEventListener("touchstart", e=>{
+  startX = e.touches[0].clientX;
+});
+
+img.addEventListener("touchend", e=>{
+  let endX = e.changedTouches[0].clientX;
+  let diff = endX - startX;
+
+  if(diff > 50){
+    prevPhoto();   // swipe right
+  }else if(diff < -50){
+    nextPhoto();   // swipe left
+  }
+});
+
+/* TYPING KAVITHAI */
+let text = `Raththam illadha bandham endraalum,
+Paasam niraintha uravu idhu…
+
+Thangai illa thambi endraalum,
+Thaai pol kaakkum Akka…
+
+Even without a blood bond,
+you are my greatest blessing.`;
+
+let i = 0;
+function typeText(){
+  if(i < text.length){
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeText, 45);
+  }
+}
+typeText();
+</script>
+
+</body>
+</html>
